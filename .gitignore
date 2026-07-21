@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+benchmarks/results/*.json
+dist/
+target/
+build/
+.env
+.env.*
+!.env.example
