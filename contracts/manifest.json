@@ -1,0 +1,47 @@
+{
+  "assets": {
+    "benchmark-result-v2.schema.json": {
+      "bytes": 3741,
+      "sha256": "sha256:821a16388913afb19fe70e37256138528126ed6fa14ef06f74191f5608e86c7a"
+    },
+    "benchmark-result.schema.json": {
+      "bytes": 746,
+      "sha256": "sha256:7df83b5774b363ff6b23a902595c50a5d34a89e66866d898a9dac43fb807a9de"
+    },
+    "execution-event.schema.json": {
+      "bytes": 1988,
+      "sha256": "sha256:c7a8cc93670344aca800aeabe0f4afd25466df8944717bd916c59d0f51508cbb"
+    },
+    "fixtures/benchmark-result-v2.invalid.json": {
+      "bytes": 175,
+      "sha256": "sha256:daec8daaea1b53a23b80c8101a29954e5811e6fcaa9a9952150904e08aeef3e3"
+    },
+    "fixtures/benchmark-result-v2.valid.json": {
+      "bytes": 1749,
+      "sha256": "sha256:0074aeacec5abbc6d5938d6ae330160865d5d866237df0ae76d0425b27e1da2e"
+    },
+    "monitoring-batch.schema.json": {
+      "bytes": 3153,
+      "sha256": "sha256:1684fb18436414e8e2dbf7e0785bae56ea49f5eb18c28d4cad72947f7df9aef4"
+    },
+    "portfolio-evidence.graphql": {
+      "bytes": 1937,
+      "sha256": "sha256:197a2b067f7a4482c3cab553bb127accc0ba8c27df443f76a8e8611a445e4d09"
+    },
+    "portfolio-evidence.openapi.yaml": {
+      "bytes": 6048,
+      "sha256": "sha256:cc92dab0c92e95e7ce19feb396706f3d9456a611bbf0704d11c4d4ea20a3583a"
+    },
+    "project.schema.json": {
+      "bytes": 7419,
+      "sha256": "sha256:200a9656c37cb2acd0917da75cdb51f0db77994f14c5b69f5db0c89b8a5c4a7f"
+    },
+    "publication-evidence.schema.json": {
+      "bytes": 983,
+      "sha256": "sha256:4a69fe3b65b66dde595216d1014e210545a62db3c4d1bcdcf6d2dd1fe42373a3"
+    }
+  },
+  "contract_set": "portfolio-interoperability",
+  "contract_set_version": "1.1.0",
+  "schema_version": 1
+}

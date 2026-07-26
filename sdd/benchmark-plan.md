@@ -1,49 +1,48 @@
-# Benchmark Plan: <project-name>
+# Benchmark Plan: portfolio-evidence-api
 
 ## Hypothesis
 
-<What this benchmark should prove.>
+The Node 24/Fastify/SQLite adapter can validate and atomically ingest V2 evidence with stable p95 latency while serving GraphQL reads under the same concurrency.
 
-## Command
+## Workload
 
-```bash
-<command>
-```
+| Mode        | Warmup | Measured | Concurrency | Repeats |
+| ----------- | -----: | -------: | ----------: | ------: |
+| Calibration |      2 |       10 |           2 |       1 |
+| Publishable |     25 |      500 |           8 |       3 |
 
-## Environment
-
-- OS:
-- CPU:
-- RAM:
-- GPU:
-- Docker version:
-- Date:
-
-## Inputs
-
-- fixture:
-- dataset size:
-- repetitions:
-- warmup:
+Each repeat performs measured REST ingestions and measured GraphQL reads through a listening TCP port. Invalid evidence must return 400 and a duplicate run ID must return 409.
 
 ## Metrics
 
-| Metric | Unit | Source | Why it matters |
-|---|---:|---|---|
-| <metric> | <unit> | <script/output> | <reason> |
+| Metric                     | Unit            | Direction | Aggregation              |
+| -------------------------- | --------------- | --------- | ------------------------ |
+| `ingestion_p95_ms`         | ms              | lower     | p95 of per-repeat p95    |
+| `ingestion_throughput_rps` | requests/second | higher    | median repeat throughput |
+| `graphql_query_p95_ms`     | ms              | lower     | p95 of per-repeat p95    |
 
-## Result schema
+Percentiles use nearest-rank over sorted samples. Any request failure prevents a publishable result.
 
-Output must be JSON and include:
+## Provenance
 
-- `project`
-- `metric`
-- `value`
-- `unit`
-- `timestamp`
-- `environment`
-- `command`
+A full run requires:
 
-## Post angle
+- `SOURCE_COMMIT`: lowercase 40-character SHA.
+- `CLEAN_TREE=true`.
+- `IMAGE_REF` and real `IMAGE_DIGEST`.
+- Lockfile, fixture, config, and canonical raw-measurement digests.
 
-<One sentence LinkedIn/GitHub post hook.>
+Calibration prints JSON but does not write publishable evidence.
+
+## Commands
+
+```bash
+docker run --rm portfolio-evidence-api benchmark --calibrate
+docker run --name evidence-benchmark \
+  -e SOURCE_COMMIT -e CLEAN_TREE=true -e IMAGE_REF -e IMAGE_DIGEST \
+  portfolio-evidence-api benchmark
+```
+
+## Post Angle
+
+A benchmark is not a screenshot: this API rejects evidence that cannot prove workload, environment, source commit, image, dependencies, and comparability.

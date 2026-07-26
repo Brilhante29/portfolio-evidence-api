@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run check
+      - run: npm run test:coverage
+      - run: npm run benchmark:calibrate
+      - run: npm audit --audit-level=high
+      - shell: pwsh
+        run: ./tools/validate-project.ps1
+
+      - run: docker build --tag portfolio-evidence-api:ci .
+      - name: Smoke test container
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name portfolio-evidence-api -p 3000:3000 portfolio-evidence-api:ci
+          trap 'docker logs portfolio-evidence-api; docker rm -f portfolio-evidence-api' EXIT
+          for attempt in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:3000/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - run: docker run --rm portfolio-evidence-api:ci benchmark --calibrate

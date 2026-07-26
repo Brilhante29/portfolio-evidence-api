@@ -1,0 +1,11 @@
+dist
+coverage
+node_modules
+.npm-cache
+.claude
+.codex
+.portfolio
+.portfolio-control
+benchmarks/results
+contracts
+design-system

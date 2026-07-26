@@ -1,0 +1,2 @@
+export const EVIDENCE_STORE = Symbol('EVIDENCE_STORE');
+export const EVIDENCE_VALIDATOR = Symbol('EVIDENCE_VALIDATOR');

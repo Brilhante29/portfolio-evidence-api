@@ -1,12 +1,13 @@
 # Release Checklist
 
-- [ ] `docker build` passes.
-- [ ] `docker run` path documented.
-- [ ] Benchmark command runs from clean checkout.
-- [ ] Benchmark result stored under `benchmarks/results/`.
-- [ ] README opens with number and result.
-- [ ] `REFERENCES.md` exists.
-- [ ] License exists.
-- [ ] No empty directories used as proof.
-- [ ] No API key required for the default path.
-- [ ] Post angle written in README or `POST.md`.
+- [x] `docker build` passes.
+- [x] `docker run` serve and calibration paths work on Node 24.
+- [ ] Publishable benchmark runs from a clean implementation commit.
+- [ ] Benchmark result is stored under `benchmarks/results/latest.json`.
+- [ ] README opens with project number and measured result.
+- [x] `REFERENCES.md` documents reuse and licenses.
+- [x] License exists.
+- [x] No empty directory is used as proof.
+- [x] No API key is required for the default path.
+- [x] Post angle is recorded.
+- [ ] GitHub Actions is green on the published repository.

@@ -12,6 +12,28 @@ function Add-Failure {
   $script:failures.Add($Message)
 }
 
+$trackedFiles = @(& git -C $root ls-files --cached --others --exclude-standard 2>$null)
+$gitListExit = $LASTEXITCODE
+$global:LASTEXITCODE = 0
+if ($gitListExit -ne 0) {
+  Add-Failure "Repository must be a readable Git worktree"
+} else {
+  $forbiddenTrackedPatterns = @(
+    '(^|/)\.gradle/',
+    '(^|/)node_modules/',
+    '(^|/)(__pycache__|\.pytest_cache|\.ruff_cache)/',
+    '(^|/)\.venv/',
+    '(^|/)\.terraform/',
+    '^(target|build|dist|coverage|\.next)/'
+  )
+  $trackedBuildArtifacts = @($trackedFiles | Where-Object {
+    $normalized = $_ -replace '\\', '/'
+    $forbiddenTrackedPatterns | Where-Object { $normalized -match $_ } | Select-Object -First 1
+  })
+  if ($trackedBuildArtifacts.Count -gt 0) {
+    Add-Failure "Tracked build/cache artifacts must be removed: $($trackedBuildArtifacts -join ', ')"
+  }
+}
 function Require-File {
   param([string]$RelativePath)
   $path = Join-Path $root $RelativePath
@@ -65,6 +87,41 @@ $requiredFiles = @(
   "sdd/reuse-improvement-review.md"
 )
 foreach ($file in $requiredFiles) { Require-File $file }
+
+$contractManifestPath = Join-Path $root "contracts/manifest.json"
+if (Test-Path -LiteralPath $contractManifestPath -PathType Leaf) {
+  try {
+    $contractRoot = [System.IO.Path]::GetFullPath((Join-Path $root "contracts"))
+    $contractManifest = Get-Content -Raw -LiteralPath $contractManifestPath | ConvertFrom-Json
+    if ([int]$contractManifest.schema_version -ne 1 -or -not [string]$contractManifest.contract_set_version) {
+      Add-Failure "Contract manifest version metadata is invalid"
+    }
+    $contractAssets = @($contractManifest.assets.PSObject.Properties)
+    if ($contractAssets.Count -eq 0) {
+      Add-Failure "Contract manifest must contain at least one asset"
+    }
+    foreach ($asset in $contractAssets) {
+      $assetPath = [System.IO.Path]::GetFullPath((Join-Path $contractRoot ($asset.Name -replace '/', [System.IO.Path]::DirectorySeparatorChar)))
+      if (-not $assetPath.StartsWith($contractRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
+        Add-Failure "Contract manifest path escapes contracts directory: $($asset.Name)"
+        continue
+      }
+      if (-not (Test-Path -LiteralPath $assetPath -PathType Leaf)) {
+        Add-Failure "Vendored contract is missing: $($asset.Name)"
+        continue
+      }
+      $actualDigest = "sha256:" + (Get-FileHash -LiteralPath $assetPath -Algorithm SHA256).Hash.ToLowerInvariant()
+      if ($actualDigest -ne [string]$asset.Value.sha256) {
+        Add-Failure "Vendored contract drift: $($asset.Name)"
+      }
+      if ((Get-Item -LiteralPath $assetPath).Length -ne [long]$asset.Value.bytes) {
+        Add-Failure "Vendored contract byte-size drift: $($asset.Name)"
+      }
+    }
+  } catch {
+    Add-Failure "Cannot validate contracts/manifest.json: $($_.Exception.Message)"
+  }
+}
 
 $readmePath = Join-Path $root "README.md"
 if (Test-Path -LiteralPath $readmePath -PathType Leaf) {
@@ -176,6 +233,14 @@ if ($manifestResultPath -ne "") {
         $metricProperty = $primaryResult.PSObject.Properties[$resultMetric]
         if ($null -ne $metricProperty) {
           $resultValue = $metricProperty.Value
+        }
+      } elseif ($primaryResult.PSObject.Properties.Name -contains "metrics") {
+        $metricMatch = @($primaryResult.metrics | Where-Object {
+          [string]$_.name -eq $manifestPrimaryMetric
+        } | Select-Object -First 1)
+        if ($metricMatch.Count -eq 1) {
+          $resultMetric = [string]$metricMatch[0].name
+          $resultValue = $metricMatch[0].value
         }
       }
 
@@ -305,12 +370,18 @@ try {
 
 $legacy = ("ro" + "che" + "do")
 $patterns = @($legacy, ($legacy.Substring(0,1).ToUpper() + $legacy.Substring(1)))
-$searchFiles = Get-ChildItem -Path $root -Recurse -File | Where-Object {
-  $normalized = $_.FullName -replace "\\", "/"
-  $normalized -notmatch "/.git/" -and
-  $normalized -notmatch "/data/runtime/" -and
-  $_.Extension -in @(".md", ".yaml", ".yml", ".json", ".ps1", ".py", ".js", ".ts", ".tsx", ".go", ".kt", ".java")
-}
+$searchExtensions = @(".md", ".yaml", ".yml", ".json", ".ps1", ".py", ".js", ".ts", ".tsx", ".go", ".kt", ".java")
+$searchFiles = @(
+  foreach ($relativePath in $trackedFiles) {
+    $candidate = Join-Path $root ($relativePath -replace '/', [System.IO.Path]::DirectorySeparatorChar)
+    if (
+      (Test-Path -LiteralPath $candidate -PathType Leaf) -and
+      ([System.IO.Path]::GetExtension($candidate) -in $searchExtensions)
+    ) {
+      Get-Item -LiteralPath $candidate
+    }
+  }
+)
 $forbidden = Select-String -Path $searchFiles.FullName -Pattern $patterns -SimpleMatch -ErrorAction SilentlyContinue
 if ($forbidden) {
   Add-Failure "Forbidden legacy project nickname found"
@@ -328,7 +399,7 @@ if (-not $SkipDocker -and (Test-Path -LiteralPath (Join-Path $root "Dockerfile")
 }
 
 if ($failures.Count -gt 0) {
-  $failures | ForEach-Object { Write-Error $_ }
+  $failures | ForEach-Object { Write-Error $_ -ErrorAction Continue }
   exit 1
 }
 

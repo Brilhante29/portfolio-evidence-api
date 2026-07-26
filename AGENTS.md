@@ -9,20 +9,20 @@ Agents must use the local `.portfolio/` snapshot as the source of truth when it 
 Read `.portfolio/decision-brain/agent-graph.yaml` first. The principal agent coordinates these roles:
 
 0. `agentic-spec-governance`
-0. `component-pack-selector`
-1. `program-planner`
-2. `architecture-selector`
-3. `engineering-principles-reviewer`
-4. `stack-decision-agent`
-5. `api-style-agent`
-6. `cloud-local-first-agent`
-7. `messaging-agent`
-8. `language-profile-agent`
-9. `benchmark-harness-agent`
-10. `design-system-agent`
-11. `security-reuse-reviewer`
-12. `reuse-improvement-reviewer`
-13. `release-ci-publisher`
+1. `component-pack-selector`
+2. `program-planner`
+3. `architecture-selector`
+4. `engineering-principles-reviewer`
+5. `stack-decision-agent`
+6. `api-style-agent`
+7. `cloud-local-first-agent`
+8. `messaging-agent`
+9. `language-profile-agent`
+10. `benchmark-harness-agent`
+11. `design-system-agent`
+12. `security-reuse-reviewer`
+13. `reuse-improvement-reviewer`
+14. `release-ci-publisher`
 
 If the runtime cannot spawn subagents, the principal agent executes the roles sequentially and records the same outputs.
 

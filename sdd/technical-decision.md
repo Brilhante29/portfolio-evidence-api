@@ -1,120 +1,38 @@
 # Technical Decision
 
-## Status
+## Runtime
 
-Proposed
+Node.js 24 LTS with strict TypeScript and `tsc` output. Nest decorator metadata is emitted by `tsc`; executable paths do not rely on `tsx/esbuild`, which failed to provide the metadata required by code-first GraphQL.
 
-## Decision Type
+## HTTP And GraphQL
 
-`<stack|api-style|cloud|messaging|database|library|runtime|framework>`
+- NestJS 11 provides modules, dependency injection, controllers, and resolvers.
+- Fastify 5 is the HTTP adapter and the surface measured by the benchmark.
+- Mercurius is the GraphQL engine because it is native to Fastify.
+- REST handles commands and idempotency; GraphQL handles reads and comparisons.
+- GraphQL mutations and subscriptions are excluded.
 
-## Context
+## Data
 
-Project: `<project-name>`
-Problem: `<problem to solve>`
-Portfolio program: `<program>`
-Public signal: `<GitHub/LinkedIn proficiency signal>`
-Benchmark: `<metric>`
+- Kysely keeps SQL and transactions visible.
+- SQLite provides atomic local persistence, WAL for file databases, and a credential-free demo.
+- The run payload remains immutable JSON; status is stored separately.
+- An idempotency key is globally unique and bound to a request digest.
 
-## Selected Option
+## Validation And Operations
 
-Selected: `<option>`
+- Ajv 2020 validates the vendored V2 JSON Schema.
+- Semantic checks reject duplicate metric names.
+- Publication approval is blocked by failures or quarantine.
+- Revalidation preserves the current operational status and cannot silently clear quarantine.
 
-Reason:
+## Supply Chain
 
-`<Why this option fits the problem, benchmark, and public signal.>`
+- `package-lock.json` is committed.
+- npm lifecycle scripts are disabled by default; `better-sqlite3 13.0.1` ships N-API binaries in the package.
+- The Docker image is multi-stage, Node 24, non-root, and contains production dependencies only.
+- Online advisory validation runs in GitHub Actions; local offline audit is non-authoritative.
 
-## Decision Brain Fields
+## Deliberate Absences
 
-- Stack profile: `<spring-kotlin-backend|fastapi-backend|go-backend|node-typescript-backend|angular|nextjs|python-ml|terraform>`
-- API style: `<rest-http|graphql|grpc|websocket|sse|cli>`
-- Messaging: `<none|outbox-only|rabbitmq|kafka|redis-streams|nats>`
-- Cloud mode: `<none|kumo-local-first|adapter-fake|real-cloud-required>`
-- Database/runtime: `<selection>`
-- Library policy: `<selection>`
-
-## Engineering Principles
-
-Coupling boundary:
-
-`<Domain/use cases must not depend on framework, DB, broker, cloud SDK, transport, or UI.>`
-
-SOLID application:
-
-- SRP: `<how responsibilities are split>`
-- OCP: `<how behavior extends without rewriting stable policy>`
-- LSP: `<how adapters/fakes/reals stay substitutable>`
-- ISP: `<small ports/interfaces used>`
-- DIP: `<high-level policy depends on abstractions>`
-
-Simplicity:
-
-- KISS: `<simplest design that proves the claim>`
-- YAGNI: `<future abstraction intentionally not added>`
-- DRY: `<duplicated business knowledge removed without premature abstraction>`
-
-Testability evidence:
-
-- `<use case test without transport/infrastructure>`
-- `<adapter or contract test>`
-## Rejected Options
-
-| Option | Why rejected |
-|---|---|
-| `<option>` | `<reason>` |
-| `<option>` | `<reason>` |
-
-## API Contract
-
-Contract artifact:
-
-`<OpenAPI|GraphQL schema|protobuf|event contract|CLI output schema|none>`
-
-GraphQL controls, when applicable:
-
-- Query complexity/depth limit: `<yes|no|not applicable>`
-- N+1 prevention: `<DataLoader/batching plan|not applicable>`
-- Field-level auth rule: `<yes|no|not applicable>`
-
-## Cloud Local-First
-
-Local provider:
-
-`<kumo|none|adapter fake>`
-
-Real provider target:
-
-`<aws|none|other>`
-
-Config switch:
-
-```txt
-CLOUD_PROVIDER=<kumo|aws|none>
-CLOUD_ENDPOINT=http://localhost:4566
-```
-
-Unsupported local behaviors:
-
-- `<behavior or none>`
-
-## Benchmark Impact
-
-Expected impact:
-
-- `<metric/result this decision should improve or clarify>`
-
-Validation command:
-
-```powershell
-<command>
-```
-
-## Operational Cost
-
-- Docker services added: `<none|kumo|postgres|redis|rabbitmq|redpanda|...>`
-- Local demo complexity: `<low|medium|high>`
-- Failure case required: `<yes|no>`
-
-## Follow-up
-
-- `<what must be revisited if benchmark fails>`
+No Prisma, ORM-generated model, broker, Redis, PostgreSQL, cloud SDK, Kumo process, or OpenTelemetry collector is added. Each would need a concrete behavior and benchmark before entering this repository.

@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "calibration": {
+    "warmupIterations": 2,
+    "measuredIterations": 10,
+    "repeat": 1,
+    "concurrency": 2
+  },
+  "full": {
+    "warmupIterations": 25,
+    "measuredIterations": 500,
+    "repeat": 3,
+    "concurrency": 8
+  }
+}
