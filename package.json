@@ -19,6 +19,7 @@
     "test:coverage": "vitest run --coverage",
     "benchmark": "npm run build --silent && node dist/benchmarks/run.js",
     "benchmark:calibrate": "npm run build --silent && node dist/benchmarks/run.js --calibrate",
+    "audit:dependencies": "npm run build --silent && node dist/tools/audit-dependencies.js --level=high",
     "validate:benchmark": "npm run build --silent && node dist/tools/validate-benchmark.js",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build"
   },

@@ -25,12 +25,13 @@ Publish repository #31, `portfolio-evidence-api`, as the evidence producer for t
 
 ## Verified
 
-- 31 tests pass in the Node 24 Docker test stage.
+- 35 tests pass in the Node 24 Docker test stage, including dependency-audit transport coverage.
 - Coverage: 93.05% statements/lines, 89.4% branches, 100% functions.
 - Runtime image, healthcheck, UID 1000, and Node 24 calibration pass.
 - Full benchmark: ingestion p95 40.201 ms; throughput 438.148 requests/second; GraphQL p95 24.119 ms; zero failures.
 - Provenance: clean commit `14e43efd63d780d21d71ca2d7ad6b0dde6bcdd0a`; image `sha256:09673d4874d540778ea5562d98097802d9636da6eb014dd2bae6df8583ccc6f1`.
 - Local benchmark schema/digest validation passes.
+- GitHub Actions run `30188840609` attempts 1 and 2 passed check, coverage, and calibration, then received raw gzip bytes from the npm audit endpoint; the replacement gate is locally verified and pending CI.
 
 ## Decisions
 
@@ -42,13 +43,12 @@ Publish repository #31, `portfolio-evidence-api`, as the evidence producer for t
 
 ## Exact Continuation
 
-1. Format documents and run `tools/validate-project.ps1 -SkipDocker`.
-2. Run `git diff --check` and inspect the evidence/documentation diff.
-3. Commit benchmark evidence and documentation.
-4. Create `Brilhante29/portfolio-evidence-api`, configure `origin`, and push `main`.
-5. Wait for GitHub Actions; inspect and fix any failed check.
-6. After green CI, set `project.yaml` status to `published`, complete the GitHub checklist entries, commit, push, and confirm the final check.
-7. Start repository #32 only after the API contracts are stable on GitHub.
+1. Run the project and benchmark validators after the dependency-audit gate change.
+2. Commit and push the CI transport fix.
+3. Wait for the new GitHub Actions run; verify the audit, project validator, Docker smoke, and Docker calibration steps all pass.
+4. Promote the generic audit transport to the reuse kit after remote proof.
+5. Set `project.yaml` status to `published`, complete GitHub checklist entries, commit, push, and confirm the final check.
+6. Start repository #32 only after the API contracts are stable on GitHub.
 
 ## Do Not
 

@@ -62,7 +62,7 @@ The dependency direction is inward. Domain and use cases import no Nest, Fastify
 
 ## Verification
 
-- 31 tests across use cases, schema validation, SQLite, HTTP, GraphQL, and benchmark statistics.
+- 35 tests across use cases, schema validation, SQLite, HTTP, GraphQL, benchmark statistics, and the dependency-audit transport.
 - 93.05% statements/lines, 89.4% branches, and 100% functions on the tested core/adapters.
 - Node 24 multi-stage Docker image, non-root runtime, healthcheck, and reproducible lockfile.
 - Prometheus metrics and Pino redaction for authorization and cookie headers.

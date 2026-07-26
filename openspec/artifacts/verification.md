@@ -2,7 +2,7 @@
 
 Completed:
 
-- 31 tests pass on the Node 24 Docker test stage.
+- 35 tests pass after adding dependency-audit transport coverage.
 - Coverage is 93.05% statements/lines, 89.4% branches, and 100% functions.
 - TypeScript, ESLint, Docker build, health, UID 1000, and calibration are verified.
 - Clean-source V2 benchmark validates with ingestion p95 40.201 ms, throughput 438.148 requests/second, GraphQL p95 24.119 ms, and zero failures.
