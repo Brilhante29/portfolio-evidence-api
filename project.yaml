@@ -7,7 +7,7 @@ program:
     - benchmark-result-v2
     - portfolio-evidence-openapi
     - portfolio-evidence-graphql
-status: implemented
+status: benchmarked
 claim: Validates, stores, compares, and governs reproducible portfolio benchmark evidence through stable contracts.
 stack:
   - nodejs-24

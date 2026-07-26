@@ -1,0 +1,97 @@
+{
+  "schema_version": 2,
+  "run_id": "26d52cdf-6983-4f76-97b4-673c249741f4",
+  "project": "portfolio-evidence-api",
+  "benchmark_id": "evidence-ingestion-http",
+  "workload": {
+    "version": "1.0.0",
+    "fixture_digest": "sha256:0074aeacec5abbc6d5938d6ae330160865d5d866237df0ae76d0425b27e1da2e",
+    "config_digest": "sha256:4f37c0694619183edc61adbdd48fd671317055809460abd5ae62292c13b4779e",
+    "warmup_iterations": 25,
+    "measured_iterations": 500,
+    "concurrency": 8
+  },
+  "metrics": [
+    {
+      "name": "ingestion_p95_ms",
+      "value": 40.201,
+      "unit": "ms",
+      "direction": "lower_is_better",
+      "samples": [
+        40.201,
+        39.802,
+        35.621
+      ],
+      "failures": 0,
+      "summary": {
+        "min": 35.621,
+        "max": 40.201,
+        "p50": 39.802,
+        "p95": 40.201
+      }
+    },
+    {
+      "name": "ingestion_throughput_rps",
+      "value": 438.148,
+      "unit": "requests/second",
+      "direction": "higher_is_better",
+      "samples": [
+        342.188,
+        444.786,
+        438.148
+      ],
+      "failures": 0,
+      "summary": {
+        "min": 342.188,
+        "max": 444.786,
+        "p50": 438.148,
+        "p95": 444.786
+      }
+    },
+    {
+      "name": "graphql_query_p95_ms",
+      "value": 24.119,
+      "unit": "ms",
+      "direction": "lower_is_better",
+      "samples": [
+        21.587,
+        21.987,
+        24.119
+      ],
+      "failures": 0,
+      "summary": {
+        "min": 21.587,
+        "max": 24.119,
+        "p50": 21.987,
+        "p95": 24.119
+      }
+    }
+  ],
+  "execution": {
+    "command": "docker run --rm portfolio-evidence-api benchmark",
+    "started_at": "2026-07-26T04:59:23.056Z",
+    "duration_seconds": 10.236,
+    "exit_code": 0,
+    "repeat": 3
+  },
+  "environment": {
+    "runtime": "v24.18.0",
+    "architecture": "x64",
+    "hardware_class": "docker-desktop-wsl2-x86_64",
+    "platform": "linux",
+    "cpu_model": "AMD Ryzen 7 5700U with Radeon Graphics",
+    "cpu_count": 6,
+    "total_memory_bytes": 16771039232,
+    "free_memory_bytes_after_run": 14889140224
+  },
+  "provenance": {
+    "source_commit": "14e43efd63d780d21d71ca2d7ad6b0dde6bcdd0a",
+    "clean_tree": true,
+    "image_ref": "portfolio-evidence-api:benchmark",
+    "image_digest": "sha256:09673d4874d540778ea5562d98097802d9636da6eb014dd2bae6df8583ccc6f1",
+    "dependency_lock_digest": "sha256:5a87a99b165d7d8cffb4d60f71f50e39f081e007558629a4274e0fd92f68b93b",
+    "producer": "local",
+    "artifact_digest": "sha256:1f2447b056c207e491084ec804e30446480e4b096feedc1c59cccea85f2dfacb"
+  },
+  "comparability_key": "evidence-ingestion-http:1.0.0:sqlite:node24:x64"
+}

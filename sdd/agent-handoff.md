@@ -4,72 +4,62 @@ Last updated: 2026-07-26
 
 ## Objective
 
-Finish and publish repository #31, `portfolio-evidence-api`, as the producer for the portfolio evidence platform. Do not start repositories #32 or #33 until the command/read contracts and benchmark result are stable on GitHub.
+Publish repository #31, `portfolio-evidence-api`, as the evidence producer for the portfolio platform. Do not start repositories #32 or #33 until this repository is on GitHub with green CI.
 
 ## Current State
 
-- Branch: `main`; no remote configured and no project commit yet.
-- Implementation: complete enough for an implementation commit.
-- Publication status: blocked only by clean-source full benchmark, final documentation values, repository creation, and GitHub CI.
+- Branch: `main`; implementation commit `14e43efd63d780d21d71ca2d7ad6b0dde6bcdd0a`.
+- Status: benchmarked locally; remote publication and GitHub CI are pending.
 - Reuse kit: PR #4 merged at `529caa1666b850f98923160d66a7a60c3ca6e403`.
 - Contract set: `portfolio-interoperability 1.1.0`.
+- Benchmark artifact: `benchmarks/results/latest.json`.
 
 ## Implemented
 
 - NestJS 11, Fastify 5, Mercurius GraphQL, strict TypeScript.
 - Ajv V2 validation and semantic metric uniqueness.
-- Kysely/SQLite atomic ingestion, WAL, indexes, filters, offset pagination, and status transitions.
-- REST ingestion and idempotent revalidate/quarantine/publication commands.
-- GraphQL read-only run, list, and comparison queries.
-- Health, Prometheus, Pino redaction, depth limit, Docker, CI, and HTTP benchmark.
-- npm lifecycle scripts disabled; better-sqlite3 13.0.1 bundled N-API binary.
-- Complete SDD/OpenSpec draft and clean reuse references.
+- Kysely/SQLite atomic ingestion, WAL, indexes, filters, pagination, and status transitions.
+- REST ingestion and idempotent operational commands; GraphQL read-only queries.
+- Health, Prometheus, Pino redaction, depth limit, Docker, CI, and real TCP benchmark.
+- Complete SDD/OpenSpec, reuse references, and no-secret local-first path.
 
 ## Verified
 
-- 31 tests pass.
-- Coverage: 93.05% statements/lines, 89.4% branches, 100% functions on core/adapters.
-- `npm run typecheck`, `npm run lint`, and benchmark calibration pass.
-- Node 24 Docker image builds.
-- Container calibration: ingestion p95 13.816 ms, throughput 174.479 requests/s, GraphQL p95 18.044 ms, zero failures.
-- Container health: `{"status":"ok","database":"ready"}`.
-- Runtime UID: 1000.
-- Local cached npm audit reported zero advisories but is not authoritative; GitHub CI must run online audit.
+- 31 tests pass in the Node 24 Docker test stage.
+- Coverage: 93.05% statements/lines, 89.4% branches, 100% functions.
+- Runtime image, healthcheck, UID 1000, and Node 24 calibration pass.
+- Full benchmark: ingestion p95 40.201 ms; throughput 438.148 requests/second; GraphQL p95 24.119 ms; zero failures.
+- Provenance: clean commit `14e43efd63d780d21d71ca2d7ad6b0dde6bcdd0a`; image `sha256:09673d4874d540778ea5562d98097802d9636da6eb014dd2bae6df8583ccc6f1`.
+- Local benchmark schema/digest validation passes.
 
-## Known Decisions
+## Decisions
 
-- Hexagonal modular monolith, not MVC, CQRS framework, or microservices.
-- REST commands; GraphQL reads.
+- Hexagonal modular monolith; REST commands and GraphQL reads.
 - SQLite now; PostgreSQL only after measured multi-writer pressure.
-- No broker because there is no async behavior.
-- No cloud/Kumo process because there is no cloud behavior. A future artifact-storage port must prove Kumo before AWS.
-- Use compiled `tsc` output for Nest runtime. `tsx/esbuild` failed GraphQL decorator metadata.
+- No broker or cloud emulator without asynchronous or cloud behavior.
+- A future artifact-storage port must prove Kumo locally before AWS.
+- Compiled `tsc` output is required for Nest decorator metadata.
 
 ## Exact Continuation
 
-1. Run formatting, lint, typecheck, tests, coverage, build, calibration, and `git diff --check`.
-2. Commit the implementation with README benchmark still pending.
-3. Confirm the tree is clean and build `portfolio-evidence-api:benchmark` from that commit.
-4. Record its 40-character SHA and Docker image ID.
-5. Run the full benchmark in a named container with `SOURCE_COMMIT`, `CLEAN_TREE=true`, `IMAGE_REF`, and `IMAGE_DIGEST`.
-6. Copy `/app/benchmarks/results/latest.json` from the stopped container.
-7. Run `npm run validate:benchmark -- benchmarks/results/latest.json`.
-8. Put the exact primary value in the first eight README lines; set project status to `benchmarked`; finish OpenSpec proof, verification, checklist, and this handoff.
-9. Run `tools/validate-project.ps1 -SkipDocker`, full local gates, and one final Docker smoke.
-10. Commit evidence, create the GitHub repository, push, wait for green CI, then mark status `published`.
+1. Format documents and run `tools/validate-project.ps1 -SkipDocker`.
+2. Run `git diff --check` and inspect the evidence/documentation diff.
+3. Commit benchmark evidence and documentation.
+4. Create `Brilhante29/portfolio-evidence-api`, configure `origin`, and push `main`.
+5. Wait for GitHub Actions; inspect and fix any failed check.
+6. After green CI, set `project.yaml` status to `published`, complete the GitHub checklist entries, commit, push, and confirm the final check.
+7. Start repository #32 only after the API contracts are stable on GitHub.
 
 ## Do Not
 
-- Do not fake `clean_tree`, image digest, CI URL, throughput, or benchmark samples.
-- Do not add PostgreSQL, RabbitMQ, Kafka, Kumo, AWS, authentication, or a UI to make the stack list longer.
-- Do not publish an empty GitHub repository.
-- Do not reuse an idempotency key with a changed payload.
-- Do not move project-specific code into the reuse kit.
+- Do not alter the measured artifact, provenance, samples, or digest manually.
+- Do not claim GitHub CI or publication before verification.
+- Do not add PostgreSQL, RabbitMQ, Kafka, Kumo, AWS, authentication, or UI without a problem force.
+- Do not move repository-specific code into the reuse kit.
 
 ## Efficiency Notes
 
-- `apply_patch` is unavailable in this Windows restricted-token sandbox; use verified byte writes and always reread the target.
-- Vitest through esbuild needs elevated execution in this environment; `tsc` and compiled benchmark do not.
-- The old validator recursively traversed `node_modules` and was terminated after 30 seconds; reuse-kit PR #4 reduced the run to 3.3 seconds.
-- Two failed Docker builds identified obsolete better-sqlite3 packaging and npm auto-node-gyp behavior. Do not add compilers; keep 13.0.1 and lifecycle scripts disabled.
-- Limit heavy write agents to two and stabilize producer contracts before consumer repositories.
+- `apply_patch` is unavailable in this restricted Windows sandbox; use verified byte writes and reread targets.
+- Host Node 22 is outside the declared runtime and crashes the native SQLite worker; authoritative checks run on Node 24 Docker/CI.
+- The bounded reuse-kit validator runs in about 3.3 seconds instead of traversing dependency caches.
+- Keep heavy write agents limited and leave this handoff current before context limits.

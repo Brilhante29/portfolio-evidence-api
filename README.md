@@ -2,9 +2,9 @@
 
 **Proves:** reproducible benchmark evidence can be validated, stored, compared, and governed behind stable REST and GraphQL contracts.
 
-**Benchmark:** `ingestion_p95_ms = pending ms` for the publishable Node 24 Docker baseline.
+**Benchmark:** `ingestion_p95_ms = 40.201 ms` for the clean-source Node 24 Docker baseline.
 
-**Status:** implemented; final clean-source benchmark pending.
+**Status:** benchmarked locally; publication and GitHub CI pending.
 
 ## Run
 
@@ -38,11 +38,11 @@ The full workload uses 25 warmups, 500 measured requests, concurrency 8, and 3 r
 
 | Metric               |                   Value | Direction        |
 | -------------------- | ----------------------: | ---------------- |
-| Ingestion p95        |              pending ms | lower is better  |
-| Ingestion throughput | pending requests/second | higher is better |
-| GraphQL query p95    |              pending ms | lower is better  |
+| Ingestion p95        |               40.201 ms | lower is better  |
+| Ingestion throughput | 438.148 requests/second | higher is better |
+| GraphQL query p95    |               24.119 ms | lower is better  |
 
-The result is validated against `contracts/benchmark-result-v2.schema.json` and stored at `benchmarks/results/latest.json`.
+The result is validated against `contracts/benchmark-result-v2.schema.json` and stored at `benchmarks/results/latest.json`. It was measured on Docker Desktop/WSL2 with 6 vCPUs; compare only artifacts with the same `comparability_key`.
 
 ## Architecture
 

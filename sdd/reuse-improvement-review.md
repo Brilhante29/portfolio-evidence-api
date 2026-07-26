@@ -7,8 +7,8 @@ Project: `31 - portfolio-evidence-api`
 - [x] after scaffold
 - [x] after architecture decision
 - [x] after first working slice
-- [ ] after benchmark result
-- [ ] before publication
+- [x] after benchmark result
+- [x] before publication
 - [x] after CI or local validation failure
 
 ## Findings

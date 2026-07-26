@@ -6,6 +6,7 @@ data/
 *.db-shm
 *.db-wal
 benchmarks/results/*.json
+!benchmarks/results/latest.json
 dist/
 .env
 .env.*

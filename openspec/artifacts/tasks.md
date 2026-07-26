@@ -5,6 +5,6 @@
 - [x] Implement idempotent operational commands.
 - [x] Add observability, tests, Docker, CI, and benchmark.
 - [x] Return reusable validation/contract improvements to the kit.
-- [ ] Commit a clean implementation source.
-- [ ] Produce and validate the full Node 24 Docker benchmark.
+- [x] Commit a clean implementation source.
+- [x] Produce and validate the full Node 24 Docker benchmark.
 - [ ] Publish the repository and confirm green CI.
