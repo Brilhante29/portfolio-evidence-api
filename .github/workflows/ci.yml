@@ -13,12 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@1e60f620b9541d1c243d1dbf7f1b2148c7c9de9 # v4.0.3
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: package-lock.json
 
       - run: npm ci
       - run: npm run check
