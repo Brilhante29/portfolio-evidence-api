@@ -4,7 +4,7 @@
 
 **Benchmark:** `ingestion_p95_ms = 40.201 ms` for the clean-source Node 24 Docker baseline.
 
-**Status:** benchmarked locally; publication and GitHub CI pending.
+**Status:** published; the implementation passed [GitHub CI run 33204777497](https://github.com/Brilhante29/portfolio-evidence-api/actions/runs/33204777497).
 
 ## Run
 
@@ -66,6 +66,7 @@ The dependency direction is inward. Domain and use cases import no Nest, Fastify
 - 93.05% statements/lines, 89.4% branches, and 100% functions on the tested core/adapters.
 - Node 24 multi-stage Docker image, non-root runtime, healthcheck, and reproducible lockfile.
 - Prometheus metrics and Pino redaction for authorization and cookie headers.
+- GitHub Actions validates checks, coverage, calibration, dependency advisories, repository policy, Docker runtime health, and Docker calibration.
 
 ## Decisions
 

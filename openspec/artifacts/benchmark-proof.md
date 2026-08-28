@@ -1,6 +1,6 @@
 # Benchmark Proof
 
-Status: local publishable baseline validated; GitHub publication pending.
+Status: published baseline; implementation verified by [GitHub CI run 33204777497](https://github.com/Brilhante29/portfolio-evidence-api/actions/runs/33204777497) on `bf230a9bac1e5f3dfc3994e1309fdfff36964358`.
 
 The clean-source Node 24 Docker run produced a V2 artifact with zero failures:
 
@@ -9,3 +9,5 @@ The clean-source Node 24 Docker run produced a V2 artifact with zero failures:
 - GraphQL p95: 24.119 ms
 
 The run used commit `14e43efd63d780d21d71ca2d7ad6b0dde6bcdd0a`, image `sha256:09673d4874d540778ea5562d98097802d9636da6eb014dd2bae6df8583ccc6f1`, 25 warmups, 500 measured requests, concurrency 8, and 3 repeats. The signed-by-content artifact is `benchmarks/results/latest.json`; results are comparable only when the `comparability_key` matches.
+
+The benchmark source SHA remains distinct from later dependency, CI, validator, and publication-metadata commits. CI calibration is a regression gate and does not replace the committed full-workload artifact.

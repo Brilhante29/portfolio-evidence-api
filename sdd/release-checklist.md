@@ -10,4 +10,4 @@
 - [x] No empty directory is used as proof.
 - [x] No API key is required for the default path.
 - [x] Post angle is recorded.
-- [ ] GitHub Actions is green on the published repository.
+- [x] GitHub Actions is green on the published implementation ([run 33204777497](https://github.com/Brilhante29/portfolio-evidence-api/actions/runs/33204777497)).

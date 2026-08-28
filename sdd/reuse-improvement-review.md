@@ -18,7 +18,8 @@ Project: `31 - portfolio-evidence-api`
 | Project validator traversed dependency caches before filtering.            | patch_now      | validation     | Scan Git tracked and non-ignored files only.                                                 | merged in reuse-kit PR #4 |
 | Project validator could not read V2 `metrics[]`.                           | patch_now      | contracts      | Resolve the manifest primary metric by name.                                                 | merged in reuse-kit PR #4 |
 | Operational OpenAPI omitted real 400 responses.                            | patch_now      | contracts      | Add `InvalidOperation` and bump contract set to 1.1.0.                                       | merged in reuse-kit PR #4 |
-| GitHub npm audit received gzip bytes without an encoding header.           | patch_now      | harness        | Use a dependency-free Bulk Advisory client with defensive gzip decoding and severity gates.  | validating in #31         |
+| GitHub npm audit received gzip bytes without an encoding header.           | patch_now      | harness        | Use a dependency-free Bulk Advisory client with defensive gzip decoding and severity gates.  | remote-proven in #31      |
+| Validator materialized optional files between existence check and search.  | patch_now      | validation     | Keep literal paths as strings and let missing optional files remain non-fatal on Linux.      | remote-proven in #31      |
 | `tsx` did not emit Nest GraphQL decorator metadata.                        | backlog        | skills         | Add compiler-runner guidance to the Node/Nest skill after another repo confirms the pattern. | recorded                  |
 | PostgreSQL and Kumo adapters were listed before the problem required them. | reject         | decision-brain | Keep them behind explicit scale or cloud-behavior triggers.                                  | rejected                  |
 
@@ -26,6 +27,7 @@ Project: `31 - portfolio-evidence-api`
 
 - PR #4: https://github.com/Brilhante29/portfolio-reuse-kit/pull/4
 - Kit main: `529caa1666b850f98923160d66a7a60c3ca6e403`.
+- Remote proof: https://github.com/Brilhante29/portfolio-evidence-api/actions/runs/33204777497
 
 ## Backlog Decisions
 
