@@ -378,17 +378,21 @@ $searchFiles = @(
       (Test-Path -LiteralPath $candidate -PathType Leaf) -and
       ([System.IO.Path]::GetExtension($candidate) -in $searchExtensions)
     ) {
-      Get-Item -LiteralPath $candidate
+      $candidate
     }
   }
 )
-$forbidden = Select-String -Path $searchFiles.FullName -Pattern $patterns -SimpleMatch -ErrorAction SilentlyContinue
+$forbidden = if ($searchFiles.Count -gt 0) {
+  Select-String -LiteralPath $searchFiles -Pattern $patterns -SimpleMatch -ErrorAction SilentlyContinue
+}
 if ($forbidden) {
   Add-Failure "Forbidden legacy project nickname found"
 }
 
 $mutableKumoPattern = "ghcr.io/sivchari/kumo:" + "latest"
-$mutableKumo = Select-String -Path $searchFiles.FullName -Pattern $mutableKumoPattern -SimpleMatch -ErrorAction SilentlyContinue
+$mutableKumo = if ($searchFiles.Count -gt 0) {
+  Select-String -LiteralPath $searchFiles -Pattern $mutableKumoPattern -SimpleMatch -ErrorAction SilentlyContinue
+}
 if ($mutableKumo) {
   Add-Failure "Mutable Kumo image reference found; pin a reviewed tag and digest"
 }
