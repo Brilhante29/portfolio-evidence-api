@@ -55,5 +55,10 @@
     "typescript-eslint": "^8.67.0",
     "unplugin-swc": "^1.5.11",
     "vitest": "^3.2.0"
+  },
+  "overrides": {
+    "@nestjs/platform-fastify": {
+      "fastify": "$fastify"
+    }
   }
 }
