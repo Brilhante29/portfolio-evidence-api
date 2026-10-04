@@ -15,6 +15,20 @@ Most benchmarks end as a number pasted into a README, with no way to tell which 
 - reads go through GraphQL, so consoles can filter, paginate, and compare runs without owning any write policy;
 - the benchmark itself proves the invalid-evidence and duplicate paths, not just the happy path.
 
+## Results
+
+Fast calibration (never writes publishable evidence): `docker run --rm portfolio-evidence-api benchmark --calibrate`.
+
+The full workload uses 25 warm-ups, 500 measured requests, concurrency 8, and 3 repeats for both ingestion and GraphQL. A publishable run requires a clean source SHA and the real image digest.
+
+| Metric               |                   Value | Direction        |
+| -------------------- | ----------------------: | ---------------- |
+| Ingestion p95        |               40.201 ms | lower is better  |
+| Ingestion throughput | 438.148 requests/second | higher is better |
+| GraphQL query p95    |               24.119 ms | lower is better  |
+
+The result is validated against [`contracts/benchmark-result-v2.schema.json`](contracts/benchmark-result-v2.schema.json) and stored in [`benchmarks/results/latest.json`](benchmarks/results/latest.json). It was measured on Docker Desktop (WSL2, 6 vCPUs); compare only artifacts with the same `comparability_key`. The implementation passed [GitHub CI run 33204777497](https://github.com/Brilhante29/portfolio-evidence-api/actions/runs/33204777497).
+
 ## Quickstart
 
 ```bash
@@ -32,20 +46,6 @@ No API key, cloud account, broker, or paid service is required. The image runs a
 | Operations | `GET /health`, `GET /metrics`                 | SQLite readiness and Prometheus telemetry                      |
 
 REST owns state-changing commands because HTTP status codes and idempotency semantics are explicit there; GraphQL stays read-only to avoid mutation ambiguity.
-
-## Results
-
-Fast calibration (never writes publishable evidence): `docker run --rm portfolio-evidence-api benchmark --calibrate`.
-
-The full workload uses 25 warm-ups, 500 measured requests, concurrency 8, and 3 repeats for both ingestion and GraphQL. A publishable run requires a clean source SHA and the real image digest.
-
-| Metric               |                   Value | Direction        |
-| -------------------- | ----------------------: | ---------------- |
-| Ingestion p95        |               40.201 ms | lower is better  |
-| Ingestion throughput | 438.148 requests/second | higher is better |
-| GraphQL query p95    |               24.119 ms | lower is better  |
-
-The result is validated against [`contracts/benchmark-result-v2.schema.json`](contracts/benchmark-result-v2.schema.json) and stored in [`benchmarks/results/latest.json`](benchmarks/results/latest.json). It was measured on Docker Desktop (WSL2, 6 vCPUs); compare only artifacts with the same `comparability_key`. The implementation passed [GitHub CI run 33204777497](https://github.com/Brilhante29/portfolio-evidence-api/actions/runs/33204777497).
 
 ## How it works
 
